@@ -5,8 +5,13 @@ import webpack from 'webpack';
 import config from '../webpack.config.dev';
 /* eslint-disable no-console */
 
+var nav = [
+  {link: '/authors', text: 'Author'},
+  {link: '/books', text: 'Book'}
+];
 
-const port = process.argv[2] || 5000;
+
+const port = process.argv[2] || 5001;
 var app = express();
 const compiler = webpack(config);
 
@@ -19,8 +24,13 @@ app.use(express.static('public'));
 app.set('views', './src/views');
 app.set('view engine', 'ejs');
 
-app.get('/', function (req, res) {
-  res.sendFile(path.join(__dirname, '../src/views/index.html'));
+app.get('/', function(req,res) {
+  res.render('index', {
+    title: 'mytitle',
+    nav: [
+      {link: '/authors', text: 'Authors'},
+      {link: '/books', text: 'Books'}
+  ]});
 });
 app.listen(port, function(err) {
     if(err) {
