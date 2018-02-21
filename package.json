@@ -2,11 +2,11 @@
   "name": "project-framework",
   "version": "1.0.0",
   "description": "project description",
-  "main": "index.js",
+  "main": "./buildscripts/server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "prestart": "babel-node buildScripts/startMessage.js",
-    "start": "npm-run-all  --parallel open:src security-check",
+    "start": "npm-run-all  --parallel open:src lint:watch",
     "open:src": "babel-node buildScripts/server.js 3000",
     "lint": "esw webpack.config.* src buildScripts --color",
     "lint:watch": "npm run lint -- --watch",
@@ -44,4 +44,12 @@
     "webpack-dev-middleware": "1.8.4",
     "webpack-hot-middleware": "2.13.0",
     "webpack-md5-hash": "0.0.5"
-  }}
+  },
+  "babel": {
+    "presets": [
+      "env"
+    ],
+    "sourceMaps": true,
+    "retainLines": true
+  }
+}

@@ -1,5 +1,4 @@
 import express from 'express';
-import path  from 'path';
 import open  from 'open';
 import webpack from 'webpack';
 import config from '../webpack.config.dev';
@@ -25,14 +24,14 @@ app.set('views', './src/views');
 app.set('view engine', 'ejs');
 
 app.get('/', function(req,res) {
-  res.render('index', {
-    title: 'mytitle',
-    nav: [
-      {link: '/authors', text: 'Authors'},
-      {link: '/books', text: 'Books'}
-  ]});
-});
-app.listen(port, function(err) {
+    res.render('index', {
+      title: 'mytitle',
+      nav: nav});
+  });
+  app.get('/books', function(req,res) {
+    res.send('hi');
+  });
+  app.listen(port, function(err) {
     if(err) {
         console.log(err);
     } else {
