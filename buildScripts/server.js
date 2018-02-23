@@ -1,7 +1,6 @@
 import express from 'express';
 import open  from 'open';
-import webpack from 'webpack';
-import config from '../webpack.config.dev';
+import logger from 'morgan';
 /* eslint-disable no-console */
 
 var nav = [
@@ -9,19 +8,16 @@ var nav = [
   {link: '/books', text: 'Book'}
 ];
 
-
 const port = process.argv[2] || 5001;
 var app = express();
-const compiler = webpack(config);
-
-app.use(require('webpack-dev-middleware')(compiler, {
-  noInfo:true,
-  publicPath: config.output.publicPath
-}));
 
 app.use(express.static('public'));
 app.set('views', './src/views');
 app.set('view engine', 'ejs');
+
+app.use(logger('dev', {
+    skip: () => app.get('env') === 'test'
+  }));
 
 app.get('/', function(req,res) {
     res.render('index', {
@@ -29,8 +25,26 @@ app.get('/', function(req,res) {
       nav: nav});
   });
   app.get('/books', function(req,res) {
-    res.send('hi');
+    res.send('hi again');
   });
+
+  // Catch 404 and forward to error handler
+// must be at end - catches all else
+app.use((req, res, next) => {
+    const err = new Error('Not Found');
+    err.status = 404;
+    next(err);
+  });
+
+  // Error handler
+  app.use((err, req, res, next) => { // eslint-disable-line no-unused-vars
+    console.log('an eror happened');
+    res
+      .status(err.status || 500)
+      .send(`error: ${err.message}`);
+  });
+
+
   app.listen(port, function(err) {
     if(err) {
         console.log(err);
